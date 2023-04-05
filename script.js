@@ -1,8 +1,13 @@
+const display = document.querySelector('.display');
+const numberButtons = document.querySelectorAll('.number');
+const operatorButtons = document.querySelectorAll('.operator');
+const equalsButton = document.querySelector('.equals');
+const clearButton = document.querySelector('.clear');
 
 let firstNumber = '';
 let operator = '';
 let secondNumber = '';
-
+let result = '';
 
 function add(num1, num2){
     return num1 + num2;
@@ -38,3 +43,47 @@ function operate(operator, num1, num2){
             return 'Error: Invalid operator!'
     }
 }
+
+function populateDisplay(buttonValue) {
+    if (firstNumber === '' && operator === '') {
+        firstNumber = buttonValue;
+        display.textContent = firstNumber;
+    } else if (firstNumber !== '' && operator === '') {
+        firstNumber += buttonValue;
+        display.textContent = firstNumber;
+    } else if (firstNumber !== '' && operator !== '' && secondNumber === '') {
+        secondNumber = buttonValue;
+        display.textContent = secondNumber;
+    } else if (firstNumber !== '' && operator !== '' && secondNumber !== '') {
+        secondNumber += buttonValue;
+        display.textContent = secondNumber;
+    }
+}
+
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        populateDisplay(button.textContent);
+    })
+})
+
+operatorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        operator = button.textContent;
+    })
+})
+
+equalsButton.addEventListener('click', () => {
+    result = operate(operator, parseFloat(firstNumber), parseFloat(secondNumber));
+    display.textContent = result;
+    firstNumber = result.toString();
+    operator = '';
+    secondNumber = '';
+})
+
+clearButton.addEventListener('click', () => {
+    firstNumber = '';
+    operator = '';
+    secondNumber = '';
+    result = '';
+    display.textContent = '0';
+})
