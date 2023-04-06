@@ -54,6 +54,10 @@ button.number:hover{
     font-size: 25px;
   }
 
+  .number{
+    color:black;
+  }
+
   button.operator:hover{
     background-color: #ffbb33;
   }
