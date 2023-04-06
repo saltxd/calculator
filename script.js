@@ -1,89 +1,95 @@
-const display = document.querySelector('.display');
+let firstOperand = '';
+let secondOperand = '';
+let currentOperation = null;
+let shouldResetScreen = false;
+
+const calculatorDisplay = document.querySelector('.display');
 const numberButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const equalsButton = document.querySelector('.equals');
 const clearButton = document.querySelector('.clear');
+const pointButton = document.querySelector('.decimal');
 
-let firstNumber = '';
-let operator = '';
-let secondNumber = '';
-let result = '';
+numberButtons.forEach((button) =>
+  button.addEventListener('click', () => appendNumber(button.textContent))
+);
 
-function add(num1, num2){
-    return num1 + num2;
+operatorButtons.forEach((button) =>
+  button.addEventListener('click', () => setOperation(button.textContent))
+);
+
+equalsButton.addEventListener('click', evaluate);
+
+clearButton.addEventListener('click', clear);
+
+pointButton.addEventListener('click', appendDecimal);
+
+function appendNumber(number) {
+  if (calculatorDisplay.textContent === '0' || shouldResetScreen) {
+    calculatorDisplay.textContent = number;
+    shouldResetScreen = false;
+  } else {
+    calculatorDisplay.textContent += number;
+  }
 }
 
-function subtract(num1, num2){
-    return num1 - num2;
+function appendDecimal() {
+  if (shouldResetScreen) resetScreen();
+  if (!calculatorDisplay.textContent.includes('.')) {
+    calculatorDisplay.textContent += '.';
+  }
 }
 
-function multiply(num1, num2){
-    return num1 * num2;
+function resetScreen() {
+  calculatorDisplay.textContent = '';
+  shouldResetScreen = false;
 }
 
-function divide(num1, num2){
-    if (num2 === 0) {
-        return "Cannot divide by zero!";
-    } else {
-    return num1 / num2;
-    }
+function clear() {
+  calculatorDisplay.textContent = '0';
+  firstOperand = '';
+  secondOperand = '';
+  currentOperation = null;
 }
 
-function operate(operator, num1, num2){
-    switch(operator) {
-        case '+':
-            return add(num1, num2);
-        case '-':
-            return subtract(num1, num2);
-        case '*':
-            return multiply(num1, num2);
-        case '/':
-            return divide(num1, num2);
-        default:
-            return 'Error: Invalid operator!'
-    }
+function setOperation(operator) {
+  if (currentOperation !== null) evaluate();
+  firstOperand = calculatorDisplay.textContent;
+  currentOperation = operator;
+  shouldResetScreen = true;
 }
 
-function populateDisplay(buttonValue) {
-    if (firstNumber === '' && operator === '') {
-        firstNumber = buttonValue;
-        display.textContent = firstNumber;
-    } else if (firstNumber !== '' && operator === '') {
-        firstNumber += buttonValue;
-        display.textContent = firstNumber;
-    } else if (firstNumber !== '' && operator !== '' && secondNumber === '') {
-        secondNumber = buttonValue;
-        display.textContent = secondNumber;
-    } else if (firstNumber !== '' && operator !== '' && secondNumber !== '') {
-        secondNumber += buttonValue;
-        display.textContent = secondNumber;
-    }
+function evaluate() {
+  if (currentOperation === null) return;
+  if (currentOperation === '/' && calculatorDisplay.textContent === '0') {
+    alert("You can't divide by 0!");
+    return;
+  }
+  secondOperand = calculatorDisplay.textContent;
+  calculatorDisplay.textContent = roundResult(
+    operate(currentOperation, firstOperand, secondOperand)
+  );
+  currentOperation = null;
 }
 
-numberButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        populateDisplay(button.textContent);
-    })
-})
+function roundResult(number) {
+  return Math.round(number * 1000) / 1000;
+}
 
-operatorButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        operator = button.textContent;
-    })
-})
-
-equalsButton.addEventListener('click', () => {
-    result = operate(operator, parseFloat(firstNumber), parseFloat(secondNumber));
-    display.textContent = result;
-    firstNumber = result.toString();
-    operator = '';
-    secondNumber = '';
-})
-
-clearButton.addEventListener('click', () => {
-    firstNumber = '';
-    operator = '';
-    secondNumber = '';
-    result = '';
-    display.textContent = '0';
-})
+function operate(operator, a, b) {
+  a = parseFloat(a);
+  b = parseFloat(b);
+  switch (operator) {
+    case '+':
+      return a + b;
+    case '-':
+      return a - b;
+    case '*':
+      return a * b;
+    case '/':
+      if (b === 0) return null;
+      else return a / b;
+    default:
+      return null;
+  }
+}
