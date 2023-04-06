@@ -20,14 +20,16 @@
     border: 2px solid black;
     border-radius: 10px;
     padding: 20px;
+    background-color: #2D3033;
 }
 
 .display{
-    padding: 10px 20px;
+    padding: 15px 25px;
     border: 1px solid gray;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-align: right;
+    background-color: white;
 }
 
 button{
@@ -35,4 +37,27 @@ button{
     border: 1px solid gray;
     border-radius: 5px;
     font-size: 20px;
+    background-color: lightgray;
 }
+
+button.number:hover{
+    background-color: white;
+}
+
+.operator {
+    background-color: #FF9500;
+    color: white;
+    font-size: 25px;
+  }
+
+  button.operator:hover{
+    background-color: #ffbb33;
+  }
+
+  button.clear:hover{
+    background-color: white;
+  }
+
+  button.equals:hover{
+    background-color: white;
+  }
