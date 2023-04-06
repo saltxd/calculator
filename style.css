@@ -1,3 +1,7 @@
+.body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .main{
     display: flex;
     align-items: center;
@@ -61,3 +65,23 @@ button.number:hover{
   button.equals:hover{
     background-color: white;
   }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 10px;
+    color: black;
+    font-size: 20px;
+  }
+
+  .fa-github {
+    color: black;
+    font-size: 24px;
+  }
+  
